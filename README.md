@@ -3,12 +3,11 @@
 Learning react whit building social app whit.
 
 * create-app for holding the auth and the db.
-  Vite for create the project.
+* Vite for create the project.
 * React for build the frontend.
-
 * Redux for state management.
 * tailwind UI for designing the components.
-
+* Shadcn UI for react components base on tailwind.
 * Firebase for hosting the application.
 
 ## Getting Started
