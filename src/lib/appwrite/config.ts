@@ -1,5 +1,4 @@
-import { Client, Account, Databases, Storage, Avatars } from 'appwrite';
-
+import { Client, Account, Databases, Avatars, Storage } from "appwrite";
 export const appwriteConfig = {
     projectId: import.meta.env.VITE_APPWRITE_PROJECT_ID,
     url: import.meta.env.VITE_APPWRITE_URL,
@@ -9,12 +8,18 @@ export const appwriteConfig = {
     postCollectionId: import.meta.env.VITE_APPWRITE_POST_COLLECTION_ID,
     saveCollectionId: import.meta.env.VITE_APPWRITE_SAVE_COLLECTION_ID,
 }
+const client = new Client();
 
-export const client = new Client()
 
-client.setProject(appwriteConfig.projectId)
-client.setEndpoint(appwriteConfig.url)
-export const account = new Account(client)
+client
+
+    .setEndpoint('https://cloud.appwrite.io/v1') // Your API Endpoint
+    .setProject('656316b464ccb4af22e5') // Your project ID
+    ;
+
+export const account = new Account(client);
 export const databases = new Databases(client)
 export const storage = new Storage(client)
 export const avatars = new Avatars(client)
+
+export { ID, Query } from 'appwrite';
