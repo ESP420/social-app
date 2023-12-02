@@ -24,9 +24,9 @@ import { useUserContext } from "@/context/AuthContext";
 
 const SignUpForm = () => {
     const { toast } = useToast()
-    const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
+    const { checkAuthUser } = useUserContext();/*  isLoading: isUserLoading  */
     const { mutateAsync: createUserAccount, isPending: isCreatingAccount } = useCreateUserAccount();
-    const { mutateAsync: signInAccount, isPending: isSignInUser } = useSignInAccount();
+    const { mutateAsync: signInAccount } = useSignInAccount();/*  isPending: isSignInUser */
 
     const navegate = useNavigate()
     // 1. Define your form.
@@ -141,8 +141,8 @@ const SignUpForm = () => {
                                 <div className="flex-center gap-2"><Loader />Loading...</div>
                             ) : "Sign up"}
                         </Button>
-                        <p className="text-small-regular text-light-2 text-center mt-2">
-                            <Link to="/sign-in" className="text-primary-500 text-small-semibold ml-1"></Link>
+                        <p className="text-small-regular text-light-2 text-center mt-2">Already have an account?
+                            <Link to="/sign-in" className="text-primary-500 text-small-semibold ml-1">Sign in</Link>
                         </p>
                     </div>
                 </form>
