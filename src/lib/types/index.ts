@@ -39,7 +39,7 @@ export type IUser = {
     name: string;
     email: string;
     username: string;
-    imageUrl: URL | string;
+    imageUrl: undefined | string;
     bio?: string;
 }
 export type INewUser = {
