@@ -22,4 +22,4 @@ export const databases = new Databases(client)
 export const storage = new Storage(client)
 export const avatars = new Avatars(client)
 
-export { ID, Query } from 'appwrite';
+export { ID, Query, Permission, Role } from 'appwrite';
