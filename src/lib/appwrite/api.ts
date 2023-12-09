@@ -115,6 +115,7 @@ export async function createPost(post: INewPost) {
             {
                 creator: post.userId,
                 caption: post.caption,
+                location: post.location,
                 imageUrl: fileUrl,
                 imageId: uploadedFile.$id,
                 tags,
@@ -140,7 +141,7 @@ export async function deleteFile(fileId: string) {
         console.warn(error)
     }
 }
-export async function getFilePreview(fileId: string) {
+export function getFilePreview(fileId: string) {
     try {
         const fileUrl = storage.getFilePreview(
             appwriteConfig.storageId,
@@ -177,4 +178,50 @@ export async function getRecentPosts() {
     if (!posts) throw Error;
 
     return posts;
+}
+//likepost whit app write
+export async function likePost(postId: string, likesArray: string[]) {
+    try {
+        const updatedPost = await databases.updateDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.postCollectionId,
+            postId,
+            { Likes: likesArray }
+        )
+        if (!updatedPost) throw Error;
+        return updatedPost;
+    } catch (error) {
+        console.log(error)
+    }
+}
+export async function savePost(postId: string, userId: string) {
+    try {
+        const updatedPost = await databases.createDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.saveCollectionId,
+            ID.unique(),
+            {
+                user: userId,
+                post: postId
+            }
+        )
+        if (!updatedPost) throw Error;
+        return updatedPost;
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export async function deleteSavedPost(saveRecordId: string) {
+    try {
+        const statusCode = await databases.deleteDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.saveCollectionId,
+            saveRecordId,
+        )
+        if (!statusCode) throw Error;
+        return statusCode;
+    } catch (error) {
+        console.log(error)
+    }
 }

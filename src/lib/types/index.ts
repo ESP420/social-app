@@ -35,7 +35,7 @@ export type IUpdatePost = {
     tags?: string;
 }
 export type IUser = {
-    id?: string,
+    id: string,
     name: string;
     email: string;
     username: string;

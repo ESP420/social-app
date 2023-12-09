@@ -34,7 +34,7 @@ const PostForm = ({ post }: PostFormProps) => {
         defaultValues: {
             caption: post ? post?.caption : '',
             file: [],
-            location: post ? post?.caption : '',
+            location: post ? post?.location : '',
             tags: post ? post?.tags.join(',') : '',
         },
     })
