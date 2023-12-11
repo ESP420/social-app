@@ -17,17 +17,21 @@ import { Textarea } from '../ui/textarea';
 import FileUploader from '../shared/FileUploader';
 import { PostValidation } from '@/lib/validation';
 import { Models } from 'appwrite';
-import { useCreatePost } from '@/lib/react-query/queriesAndMutation';
+import { useCreatePost, useUpdatePost } from '@/lib/react-query/queriesAndMutation';
 import { useUserContext } from '@/context/AuthContext';
 import Loader from '../shared/Loader';
 
 type PostFormProps = {
     post?: Models.Document
+    action: 'Create' | 'Update'
 }
-const PostForm = ({ post }: PostFormProps) => {
+const PostForm = ({ post, action }: PostFormProps) => {
+    console.log(post?.imageUrl)
     const { user } = useUserContext();
     const navigate = useNavigate()
     const { mutateAsync: createPost, isPending: isLoadingCreate } = useCreatePost();
+    const { mutateAsync: updatePost, isPending: isLoadingUpdate } = useUpdatePost();
+
     // 1. Define your form.
     const form = useForm<z.infer<typeof PostValidation>>({
         resolver: zodResolver(PostValidation),
@@ -44,16 +48,33 @@ const PostForm = ({ post }: PostFormProps) => {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
         try {
-            const newPost = await createPost({
-                ...values,
-                userId: user?.id || ''
-            });
-            if (!newPost) {
-                return toast({
-                    title: "Please try again.",
+            if (post && action == 'Update') {
+                const updatedPost = await updatePost({
+                    ...values,
+                    postId: post.$id,
+                    imageId: post?.imageId,
+                    imageUrl: post?.imageUrl
+                })
+                if (!updatedPost) {
+                    return toast({
+                        title: "Please try again.",
+                    });
+                }
+
+                navigate(`/post/${post.$id}`)
+            } else {
+                const newPost = await createPost({
+                    ...values,
+                    userId: user?.id || ''
                 });
+                if (!newPost) {
+                    return toast({
+                        title: "Please try again.",
+                    });
+
+                    navigate('/')
+                }
             }
-            navigate('/')
 
         } catch (error) {
             console.warn(error)
@@ -84,7 +105,7 @@ const PostForm = ({ post }: PostFormProps) => {
                             <FormLabel className="shad-form_label">Add photos</FormLabel>
                             <FormControl>
                                 <FileUploader fieldChange={field.onChange}
-                                    mediaUrl={post?.imageURL} />
+                                    mediaUrl={post?.imageUrl} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -119,10 +140,10 @@ const PostForm = ({ post }: PostFormProps) => {
                 />
                 <Button type="button"
                     className='shad-button_dark_4'>Cancel</Button>
-                <Button type="submit" className='shad-button_primary whitespace-nowrap'>
-                    {isLoadingCreate ? (
+                <Button type="submit" disabled={isLoadingCreate || isLoadingUpdate} className='shad-button_primary whitespace-nowrap'>
+                    {isLoadingCreate || isLoadingUpdate ? (
                         <div className="flex-center gap-2"><Loader />Loading...</div>
-                    ) : "Submit"}
+                    ) : `${action} post`}
                 </Button>
             </form>
         </Form>

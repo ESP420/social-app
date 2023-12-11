@@ -5,8 +5,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function shortDate(date: string) {
-  const longDate = new Date(date);
+export function shortDate(date: string | undefined) {
+  const longDate = date ? new Date(date) : new Date();
   const options: Intl.DateTimeFormatOptions = {
     weekday: 'short',
     year: 'numeric',
