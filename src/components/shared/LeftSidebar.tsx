@@ -16,7 +16,7 @@ const LeftSidebar = () => {
 
     useEffect(() => {
         if (isSuccess) navigate(0)
-    }, [isSuccess])
+    }, [isSuccess, navigate])
     return (
         <nav className='leftsidebar'>
             <div className='flex flex-col gap-11'>
