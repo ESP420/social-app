@@ -172,14 +172,14 @@ export async function uploadFile(file: File) {
 export async function getRecentPosts() {
     const posts = await databases.listDocuments(
         appwriteConfig.databaseId,
-        appwriteConfig.postCollectionId, [Query.orderDesc('$createdAt'), Query.limit(20)]
+        appwriteConfig.postCollectionId, [Query.orderDesc('$createdAt'), Query.limit(2)]
     );
 
     if (!posts) throw Error;
 
     return posts;
 }
-//likepost whit app write
+//likePost whit app write
 export async function likePost(postId: string, likesArray: string[]) {
     try {
         const updatedPost = await databases.updateDocument(
@@ -293,6 +293,38 @@ export async function deletePost(postId: string, imageId: string) {
         )
         if (!statusCode) throw Error;
         return { statusCode };
+    } catch (error) {
+        console.warn(error)
+    }
+}
+export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
+    const queries = [Query.orderDesc('$updatedAt'), Query.limit(2)]
+
+    if (pageParam != 1) {
+        queries.push(Query.cursorAfter(pageParam.toString()))
+    }
+    try {
+        const posts = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.postCollectionId,
+            queries,
+        )
+        if (!posts) throw Error;
+        return posts;
+    } catch (error) {
+        console.warn(error)
+    }
+}
+export async function searchPosts(searchTerm: string) {
+    const queries = [Query.search('caption', searchTerm)]
+    try {
+        const posts = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.postCollectionId,
+            queries,
+        )
+        if (!posts) throw Error;
+        return posts;
     } catch (error) {
         console.warn(error)
     }
