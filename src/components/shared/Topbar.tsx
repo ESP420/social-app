@@ -12,7 +12,7 @@ const TopBar = () => {
 
     useEffect(() => {
         if (isSuccess) navigate(0)
-    }, [isSuccess])
+    }, [isSuccess, navigate])
     return (
         <section className='topbar'>
             <div className='flex-between py-4 px-5'>

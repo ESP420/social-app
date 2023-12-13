@@ -3,7 +3,7 @@ import { IContextType, IUser } from '@/lib/types';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export const INITIAL_USER = {
+const INITIAL_USER = {
   id: "",
   name: "",
   username: "",
@@ -64,7 +64,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       navigate("/sign-in");
     }
     checkAuthUser();
-  }, []);
+  }, [navigate]);
   const value = {
     user,
     setUser,
