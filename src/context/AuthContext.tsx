@@ -2,7 +2,6 @@ import { getCurrentUser } from '@/lib/appwrite/api';
 import { IContextType, IUser } from '@/lib/types';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 const INITIAL_USER = {
   id: "",
   name: "",
@@ -29,7 +28,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate()
-
+  const pathName = window.location.pathname;
   const checkAuthUser = async () => {
     setIsLoading(true);
     try {
@@ -57,14 +56,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const cookieFallback = localStorage.getItem("cookieFallback");
     if (
-      cookieFallback === "[]" ||
-      cookieFallback === null ||
-      cookieFallback === undefined
+      (cookieFallback === "[]" ||
+        cookieFallback === null ||
+        cookieFallback === undefined) &&
+      pathName !== '/sign-up'
     ) {
+
+      console.log(pathName)
       navigate("/sign-in");
     }
     checkAuthUser();
-  }, [navigate]);
+  }, [navigate, pathName]);
   const value = {
     user,
     setUser,
